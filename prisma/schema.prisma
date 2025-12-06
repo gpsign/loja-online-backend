@@ -1,0 +1,207 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  customer
+  seller
+  admin
+}
+
+enum ProductStatus {
+  active
+  inactive
+  draft
+}
+
+enum OrderStatus {
+  pending
+  paid
+  shipped
+  delivered
+  canceled
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String   @map("full_name") @db.VarChar(100)
+  email        String   @unique @db.VarChar(150)
+  passwordHash String   @map("password_hash") @db.VarChar(255)
+  role         Role     @default(customer)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  sessions     Session[]
+  sellerConfig SellerConfig?
+  products     Product[]     @relation("SellerProducts")
+  carts        Cart[]
+  favorites    Favorite[]
+  orders       Order[]       @relation("CustomerOrders")
+  soldItems    OrderItem[]   @relation("SellerSales")
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  token     String   @unique @db.Text
+  userId    Int      @map("user_id")
+  ipAddress String?  @map("ip_address") @db.VarChar(45)
+  userAgent String?  @map("user_agent") @db.Text
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+}
+
+model SellerConfig {
+  sellerId                   Int     @id @map("seller_id")
+  defaultStockWarningEnabled Boolean @default(true) @map("default_stock_warning_enabled")
+  defaultStockThreshold      Int     @default(5) @map("default_stock_threshold")
+
+  seller User @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+
+  @@map("seller_configs")
+}
+
+model Category {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(100)
+  parentId Int?   @map("parent_id")
+
+  parent   Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryHierarchy")
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          Int     @id @default(autoincrement())
+  sellerId    Int     @map("seller_id")
+  categoryId  Int?    @map("category_id")
+  sku         String? @unique @db.VarChar(50)
+  name        String  @db.VarChar(200)
+  description String? @db.Text
+  price       Decimal @db.Decimal(10, 2)
+
+  // Controle de Estoque
+  stockQuantity   Int     @default(0) @map("stock_quantity")
+  isStockInfinite Boolean @default(true) @map("is_stock_infinite")
+
+  // Status
+  status      ProductStatus @default(active)
+  publishedAt DateTime?     @map("published_at")
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  // Relacionamentos
+  seller      User           @relation("SellerProducts", fields: [sellerId], references: [id])
+  category    Category?      @relation(fields: [categoryId], references: [id])
+  config      ProductConfig?
+  images      ProductImage[]
+  cartItems   CartItem[]
+  favoritedBy Favorite[]
+  orderItems  OrderItem[]
+
+  @@index([sellerId])
+  @@index([categoryId])
+  @@index([name, sku])
+  @@map("products")
+}
+
+model ProductConfig {
+  productId              Int      @id @map("product_id")
+  showStockWarning       Boolean? @map("show_stock_warning") // Nullable para herança
+  stockThresholdOverride Int?     @map("stock_threshold_override")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_configs")
+}
+
+model ProductImage {
+  id           Int     @id @default(autoincrement())
+  productId    Int     @map("product_id")
+  imageUrl     String  @map("image_url") @db.VarChar(255)
+  isCover      Boolean @default(false) @map("is_cover")
+  displayOrder Int     @default(0) @map("display_order")
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  user  User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id        Int      @id @default(autoincrement())
+  cartId    Int      @map("cart_id")
+  productId Int      @map("product_id")
+  quantity  Int      @default(1)
+  addedAt   DateTime @default(now()) @map("added_at")
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("cart_items")
+}
+
+model Favorite {
+  userId    Int      @map("user_id")
+  productId Int      @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+  @@map("favorites")
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  customerId  Int         @map("customer_id")
+  totalAmount Decimal     @map("total_amount") @db.Decimal(12, 2)
+  status      OrderStatus @default(pending)
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  customer User        @relation("CustomerOrders", fields: [customerId], references: [id])
+  items    OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int     @map("order_id")
+  productId Int     @map("product_id")
+  sellerId  Int     @map("seller_id")
+  quantity  Int
+  unitPrice Decimal @map("unit_price") @db.Decimal(10, 2)
+
+  subtotal Decimal? @db.Decimal(12, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  seller  User    @relation("SellerSales", fields: [sellerId], references: [id])
+
+  @@index([sellerId])
+  @@map("order_items")
+}
