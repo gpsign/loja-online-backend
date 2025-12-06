@@ -1,7 +1,7 @@
 import { AppEnv } from "config";
 import { UnauthorizedError } from "errors";
 import { NextFunction, Response } from "express";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { SessionRepository } from "repositories";
 
 export async function authenticateToken(
