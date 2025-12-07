@@ -41,7 +41,7 @@ export class UserService {
 
     if (!user)
       throw new NotFoundError(
-        `User not found.\nkey: ${key}\nvalue: "${value}"`
+        `Usuário não encontrado. key: "${key}"; value: "${value}"`
       );
 
     return user;

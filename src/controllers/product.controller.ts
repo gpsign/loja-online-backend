@@ -10,4 +10,9 @@ export class ProductController {
 
     return res.status(201).json(product);
   }
+
+  static async getProducts(req: Request, res: Response) {
+    const products = await ProductService.listProducts(req.body);
+    return res.status(201).json(products);
+  }
 }

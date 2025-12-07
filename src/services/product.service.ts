@@ -1,7 +1,7 @@
 import { Prisma, Product } from "@prisma/client";
 import { NotFoundError } from "errors";
 import { ProductRepository } from "repositories";
-import { CreateProductParams } from "types";
+import { CreateProductParams, ProductQueryConfig } from "types";
 import { ProductUtils } from "utils";
 
 export class ProductService {
@@ -31,13 +31,17 @@ export class ProductService {
     value: NonNullable<Prisma.ProductWhereUniqueInput[K]>,
     select: Prisma.ProductSelect | null = null
   ) {
-    const product = await ProductRepository.findByKey(key, value, select);
+    const product = await ProductRepository.findByKey(key, value, { select });
 
     if (!product)
       throw new NotFoundError(
-        `Product not found.\nkey: ${key}\nvalue: "${value}"`
+        `Produto não encontrado. key: "${key}"; value: "${value}"`
       );
 
-    return product!;
+    return product;
+  }
+
+  static async listProducts(params: ProductQueryConfig) {
+    return await ProductRepository.findAll(params);
   }
 }

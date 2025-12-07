@@ -22,3 +22,23 @@ export interface CreateProductParams {
     stockThresholdOverride?: number;
   };
 }
+
+export interface ProductQueryConfig {
+  page?: number;
+  size?: number;
+  search?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  orderBy?: "price" | "createdAt" | "name";
+  orderType?: "asc" | "desc";
+}
+
+export interface ProductQueryResult<T> {
+  data: T[];
+  meta: {
+    total: number;
+    page: number;
+    size: number;
+    totalPages: number;
+  };
+}

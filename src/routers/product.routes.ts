@@ -18,6 +18,11 @@ ProductRouter.post(
     "/products/favorites",
     validateQuery(FavoriteSchema.Query),
     FavoriteController.getUsersWhoFavorited
+  )
+  .get(
+    "/products",
+    validateBody(ProductSchema.Query),
+    ProductController.getProducts
   );
 
 export { ProductRouter };

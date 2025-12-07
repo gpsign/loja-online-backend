@@ -16,13 +16,14 @@ export class CartService {
 
     if (!ProductUtils.isAvailable(product))
       throw new ConflictError(
-        `The product ${`"${product.name}"`} is unavailable`,
+        `O produto ${`"${product.name}"`} está indisponível`,
         "UNAVAILABLE_PRODUCT"
       );
 
     if (!ProductUtils.isStockAvailable(product, quantity))
       throw new ConflictError(
-        `Insufficient stock for the product "${product.name}"`
+        `Estoque insuficiente do produto "${product.name}"`,
+        "INSUFFICIENT_STOCK"
       );
 
     const added = await CartRepository.createItem({
@@ -57,13 +58,14 @@ export class CartService {
 
     if (!ProductUtils.isAvailable(product))
       throw new ConflictError(
-        `The product ${`"${product.name}"`} is unavailable`,
+        `O produto ${`"${product.name}"`} está indisponível`,
         "UNAVAILABLE_PRODUCT"
       );
 
     if (!ProductUtils.isStockAvailable(product, quantity))
       throw new ConflictError(
-        `Insufficient stock for the product "${product.name}"`
+        `Estoque insuficiente do produto "${product.name}"`,
+        "INSUFFICIENT_STOCK"
       );
 
     await CartRepository.updateItemQuantity({

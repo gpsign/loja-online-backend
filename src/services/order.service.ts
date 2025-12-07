@@ -13,7 +13,7 @@ export class OrderService {
     const cart = await CartRepository.getUserCart(userId);
 
     if (!cart || cart.items.length === 0) {
-      throw new BadRequestError("Cart is empty", "EMPTY_CART");
+      throw new BadRequestError("O carrinho está vazio", "EMPTY_CART");
     }
 
     let totalAmount = 0;
@@ -41,9 +41,9 @@ export class OrderService {
 
       if (inactive || !productData)
         throw new ConflictError(
-          `The product ${
+          `O produto ${
             productData?.name ? `"${productData.name}"` : ""
-          } is unavailable`,
+          } está indisponível`,
           "UNAVAILABLE_PRODUCT"
         );
 
@@ -51,10 +51,10 @@ export class OrderService {
         productData.isStockInfinite ||
         productData.stockQuantity >= item.quantity;
 
-      console.log(productData);
       if (!sufficientStock)
         throw new ConflictError(
-          `Insufficient stock for the product "${productData.name}"`
+          `Estoque insuficiente do produto "${productData.name}"`,
+          "INSUFFICIENT_STOCK"
         );
 
       const unitPrice = productData.price.toNumber();

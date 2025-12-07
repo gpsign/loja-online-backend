@@ -1,4 +1,5 @@
 import z from "zod";
+import { AppSchema } from "./app.schema";
 
 export class ProductSchema {
   static Image = z.object({
@@ -16,5 +17,15 @@ export class ProductSchema {
     isStockInfinite: z.boolean().optional(),
     status: z.boolean().optional(),
     images: z.array(ProductSchema.Image).optional(),
+  });
+
+  static Query = z.object({
+    page: AppSchema.SignedInteger.optional(),
+    size: AppSchema.SignedInteger.optional(),
+    search: z.string(),
+    minPrice: AppSchema.SignedInteger.optional(),
+    maxPrice: AppSchema.SignedInteger.optional(),
+    orderBy: z.enum(["price", "createdAt", "name"]),
+    orderType: z.enum(["asc", "desc"]),
   });
 }
