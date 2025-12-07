@@ -22,10 +22,10 @@ export class ProductSchema {
   static Query = z.object({
     page: AppSchema.SignedInteger.optional(),
     size: AppSchema.SignedInteger.optional(),
-    search: z.string(),
+    search: z.string().optional(),
     minPrice: AppSchema.SignedInteger.optional(),
     maxPrice: AppSchema.SignedInteger.optional(),
-    orderBy: z.enum(["price", "createdAt", "name"]),
-    orderType: z.enum(["asc", "desc"]),
+    orderBy: z.enum(["price", "createdAt", "name"]).optional(),
+    orderType: z.enum(["asc", "desc"]).optional(),
   });
 }
