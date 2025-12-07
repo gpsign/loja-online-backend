@@ -1,0 +1,103 @@
+import { User } from "@prisma/client";
+import { BadRequestError, ConflictError } from "errors";
+import { prisma } from "prisma";
+import {
+  CartRepository,
+  OrderRepository,
+  ProductRepository,
+} from "repositories";
+import { OrderItemSnapshot } from "types";
+
+export class OrderService {
+  static async orderCart(userId: User["id"]) {
+    const cart = await CartRepository.getUserCart(userId);
+
+    if (!cart || cart.items.length === 0) {
+      throw new BadRequestError("Cart is empty", "EMPTY_CART");
+    }
+
+    let totalAmount = 0;
+    const orderItems: OrderItemSnapshot[] = [];
+    const productsToUpdateStock: { id: number; newStock: number }[] = [];
+
+    for (const item of cart.items) {
+      const productData = await ProductRepository.findByKey(
+        "id",
+        item.productId,
+        {
+          select: {
+            name: true,
+            id: true,
+            price: true,
+            sellerId: true,
+            stockQuantity: true,
+            isStockInfinite: true,
+            status: true,
+          },
+        }
+      );
+
+      const inactive = Boolean(productData?.status !== "active");
+
+      if (inactive || !productData)
+        throw new ConflictError(
+          `The product ${
+            productData?.name ? `"${productData.name}"` : ""
+          } is unavailable`,
+          "UNAVAILABLE_PRODUCT"
+        );
+
+      const sufficientStock =
+        productData.isStockInfinite ||
+        productData.stockQuantity >= item.quantity;
+
+      console.log(productData);
+      if (!sufficientStock)
+        throw new ConflictError(
+          `Insufficient stock for the product "${productData.name}"`
+        );
+
+      const unitPrice = productData.price.toNumber();
+      const subtotal = unitPrice * item.quantity;
+
+      totalAmount += subtotal;
+
+      orderItems.push({
+        productId: item.productId,
+        sellerId: productData.sellerId,
+        quantity: item.quantity,
+        unitPrice: unitPrice,
+      });
+
+      if (productData.isStockInfinite) continue;
+
+      productsToUpdateStock.push({
+        id: productData.id,
+        newStock: productData.stockQuantity - item.quantity,
+      });
+    }
+
+    return prisma.$transaction(
+      async (tx) => {
+        const createdOrder = await OrderRepository.orderItems({
+          tx,
+          customerId: userId,
+          totalAmount,
+          items: orderItems as any,
+        });
+
+        const stockPromises = productsToUpdateStock.map((p) =>
+          tx.product.update({
+            where: { id: p.id },
+            data: { stockQuantity: p.newStock },
+          })
+        );
+        await Promise.all(stockPromises);
+
+        await CartRepository.clearCart(userId);
+        return createdOrder;
+      },
+      { isolationLevel: "Serializable" }
+    );
+  }
+}

@@ -10,6 +10,10 @@ export type FindUniqueArgs<T extends ModelKeys> = Parameters<
   PrismaClient[T]["findUnique"]
 >[0];
 
+export type TransactionFunction = Parameters<PrismaClient["$transaction"]>[0];
+
+export type TransactionTx = Parameters<TransactionFunction>[0];
+
 export type FindByKeyConfig<T extends ModelKeys> = Partial<
   Omit<FindUniqueArgs<T>, "where">
 >;

@@ -132,6 +132,15 @@ class CartRepositoryClass extends AppRepository<"cart"> {
       return await this.getUserCart(userId);
     });
   }
+
+  async clearCart(userId: User["id"]) {
+    const cart = await this.getUserCart(userId);
+
+    return prisma.$transaction(async (tx) => {
+      await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
+      await tx.cart.delete({ where: { id: cart.id } });
+    });
+  }
 }
 
 const CartRepository = new CartRepositoryClass();

@@ -1,3 +1,4 @@
+import { Product } from "@prisma/client";
 import _ from "lodash";
 import { CreateProductParams } from "types";
 
@@ -17,5 +18,14 @@ export class ProductUtils {
       }),
       "displayOrder"
     );
+  }
+
+  static isAvailable(product: Product) {
+    return product && product.status === "active";
+  }
+
+  static isStockAvailable(product: Product, quantity: number) {
+    if (!quantity || product.isStockInfinite) return true;
+    return product.stockQuantity >= quantity;
   }
 }

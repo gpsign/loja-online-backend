@@ -7,24 +7,22 @@ class OrderRepositoryClass extends AppRepository<"order"> {
     super(prisma.order);
   }
 
-  async createOrderAndItems({ items, ...data }: CreateOrder): Promise<Order> {
-    return prisma.$transaction(async (tx) => {
-      const order = await tx.order.create({
-        data: {
-          ...data,
-          status: OrderStatus.pending,
-          items: {
-            createMany: {
-              data: items,
-              skipDuplicates: true,
-            },
+  async orderItems({ items, tx, ...data }: CreateOrder): Promise<Order> {
+    const order = await tx.order.create({
+      data: {
+        ...data,
+        status: OrderStatus.pending,
+        items: {
+          createMany: {
+            data: items,
+            skipDuplicates: true,
           },
         },
-        include: { items: true },
-      });
-
-      return order;
+      },
+      include: { items: true },
     });
+
+    return order;
   }
 }
 
