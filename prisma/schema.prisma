@@ -88,7 +88,6 @@ model Product {
   id          Int     @id @default(autoincrement())
   sellerId    Int     @map("seller_id")
   categoryId  Int?    @map("category_id")
-  sku         String? @unique @db.VarChar(50)
   name        String  @db.VarChar(200)
   description String? @db.Text
   price       Decimal @db.Decimal(10, 2)
@@ -113,7 +112,6 @@ model Product {
 
   @@index([sellerId])
   @@index([categoryId])
-  @@index([name, sku])
   @@map("products")
 }
 

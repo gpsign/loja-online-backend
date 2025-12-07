@@ -1,11 +1,12 @@
 import { AppEnv } from "config";
 import { UnauthorizedError } from "errors";
-import { NextFunction, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { SessionRepository } from "repositories";
+import { AuthRequest, UserJWTData } from "types";
 
 export async function authenticateToken(
-  req: any,
+  req: Request,
   _res: Response,
   next: NextFunction
 ) {
@@ -15,11 +16,12 @@ export async function authenticateToken(
   const token = authHeader.split(" ")[1];
   if (!token) throw new UnauthorizedError();
 
-  const a: any = jwt.verify(token, AppEnv.JWT_SECRET);
+  const userData = jwt.verify(token, AppEnv.JWT_SECRET) as UserJWTData;
 
   const session = await SessionRepository.findSession(token);
   if (!session) throw new UnauthorizedError();
 
-  req.userId = a.userId;
+  (req as AuthRequest).userId = userData.userId;
+
   next();
 }

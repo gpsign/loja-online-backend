@@ -15,7 +15,7 @@ export class AuthService {
   ): Promise<any> {
     const { email, password } = params;
 
-    const user = await UserService.getUserOrFail(email);
+    const user = await UserService.getUserByEmailOrFail(email);
 
     await AuthService.validatePasswordOrFail(password, user.passwordHash);
 
