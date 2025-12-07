@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { FavoriteService } from "services/favorite.service";
+import { FavoriteService } from "services";
 import { AuthRequest } from "types";
 
 export class FavoriteController {

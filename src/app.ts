@@ -1,8 +1,7 @@
-import { globalErrorHandler } from "middlewares";
 import cors from "cors";
 import express from "express";
-import { AuthRouter, UserRouter } from "routers";
-import { PrivateRouter } from "routers/private.routes";
+import { globalErrorHandler } from "middlewares";
+import { AuthRouter, PrivateRouter, UserRouter } from "routers";
 
 const app = express();
 

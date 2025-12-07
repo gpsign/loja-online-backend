@@ -1,4 +1,5 @@
 export * from "./auth.type";
+export * from "./cart.type";
 export * from "./env.type";
 export * from "./favorite.type";
 export * from "./product.type";
