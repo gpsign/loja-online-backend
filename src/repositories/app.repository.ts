@@ -3,10 +3,10 @@ import {
   CreateArgs,
   CreateReturn,
   DataCreate,
+  FindByKeyConfig,
   FindUniqueReturn,
   ModelKeys,
   RealUniqueKeys,
-  Select,
   WhereUnique,
 } from "types";
 
@@ -16,13 +16,13 @@ export abstract class AppRepository<ModelName extends ModelKeys> {
   async findByKey<K extends RealUniqueKeys<ModelName>>(
     key: K,
     value: NonNullable<WhereUnique<ModelName>[K]>,
-    select?: Select<ModelName>
+    args?: FindByKeyConfig<ModelName>
   ): Promise<FindUniqueReturn<ModelName>> {
     const where = { [key]: value } as unknown as WhereUnique<ModelName>;
 
     return (this.delegate as any).findUnique({
       where,
-      select,
+      ...args,
     });
   }
 

@@ -10,9 +10,15 @@ export type FindUniqueArgs<T extends ModelKeys> = Parameters<
   PrismaClient[T]["findUnique"]
 >[0];
 
+export type FindByKeyConfig<T extends ModelKeys> = Partial<
+  Omit<FindUniqueArgs<T>, "where">
+>;
+
 export type CreateArgs<T extends ModelKeys> = Parameters<
   PrismaClient[T]["create"]
 >[0];
+
+export type CreateConfig<T extends ModelKeys> = Omit<CreateArgs<T>, "data">;
 
 export type WhereUnique<T extends ModelKeys> = FindUniqueArgs<T>["where"];
 

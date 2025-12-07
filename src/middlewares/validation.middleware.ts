@@ -6,7 +6,7 @@ export const validate =
   (schema: ZodType, location: RequestLocation) =>
   async (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const data = req[location];
+      const data = req[location] ?? {};
 
       const validatedData = await schema.parseAsync(data);
 

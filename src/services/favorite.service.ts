@@ -1,20 +1,36 @@
+import { Product, User } from "@prisma/client";
 import { FavoriteRepository } from "repositories";
 import { CreateFavoriteParams } from "types";
 import { ProductService } from "./product.service";
 import { UserService } from "./user.service";
-import { Product, User } from "@prisma/client";
 
 export class FavoriteService {
   static async addToFavorite({ productId, userId }: CreateFavoriteParams) {
-    await ProductService.findOrFail("id", productId);
+    const product = await ProductService.findOrFail("id", productId);
     await UserService.findOrFail("id", userId);
 
-    const product = await FavoriteRepository.create({
-      product: { connect: { id: productId } },
-      user: { connect: { id: userId } },
-    });
+    const duplicate = await FavoriteRepository.findByKey(
+      "userId_productId",
+      {
+        userId,
+        productId,
+      },
+      { include: { product: true } }
+    );
 
-    return product;
+    if (duplicate) {
+      return duplicate;
+    }
+
+    const favorite = await FavoriteRepository.create(
+      {
+        product: { connect: { id: productId } },
+        user: { connect: { id: userId } },
+      },
+      { include: { product: true } }
+    );
+
+    return favorite;
   }
 
   static async removeFromFavorite({ productId, userId }: CreateFavoriteParams) {

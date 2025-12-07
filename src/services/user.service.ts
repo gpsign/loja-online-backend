@@ -12,9 +12,7 @@ import { UserRegistrationParams } from "types";
 export class UserService {
   static async getUserByEmailOrFail(email: string): Promise<User> {
     const user = await UserRepository.findByEmail(email, {
-      id: true,
-      email: true,
-      passwordHash: true,
+      select: { id: true, email: true, passwordHash: true },
     });
 
     if (!user) throw new InvalidCredentialsError();
@@ -39,7 +37,7 @@ export class UserService {
     value: NonNullable<Prisma.UserWhereUniqueInput[K]>,
     select: Prisma.UserSelect | null = null
   ) {
-    const user = await UserRepository.findByKey(key, value, select);
+    const user = await UserRepository.findByKey(key, value, { select });
 
     if (!user)
       throw new NotFoundError(
