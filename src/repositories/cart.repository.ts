@@ -1,9 +1,14 @@
-import { Cart, Prisma, User } from "@prisma/client";
+import { Cart, User } from "@prisma/client";
 import { prisma } from "prisma";
 import { CartUserProduct } from "types";
+import { AppRepository } from "./app.repository";
 
-export class CartRepository {
-  static async getUserCart(userId: User["id"]) {
+class CartRepositoryClass extends AppRepository<"cart"> {
+  constructor() {
+    super(prisma.cart);
+  }
+
+  async getUserCart(userId: User["id"]) {
     const include = {
       items: {
         orderBy: { addedAt: "asc" },
@@ -34,9 +39,9 @@ export class CartRepository {
       include,
     });
   }
-  static async createItem({ userId, productId, quantity }: CartUserProduct) {
+  async createItem({ userId, productId, quantity }: CartUserProduct) {
     quantity ??= 1;
-    const cart = await CartRepository.getUserCart(userId);
+    const cart = await this.getUserCart(userId);
 
     return prisma.$transaction(async (tx) => {
       const existingItem = await tx.cartItem.findFirst({
@@ -86,11 +91,8 @@ export class CartRepository {
     });
   }
 
-  static async deleteItem({
-    userId,
-    productId,
-  }: CartUserProduct): Promise<void> {
-    const cart = await CartRepository.getUserCart(userId);
+  async deleteItem({ userId, productId }: CartUserProduct): Promise<void> {
+    const cart = await this.getUserCart(userId);
 
     await prisma.cartItem.deleteMany({
       where: {
@@ -100,12 +102,12 @@ export class CartRepository {
     });
   }
 
-  static async updateItemQuantity({
+  async updateItemQuantity({
     userId,
     productId,
     quantity,
   }: CartUserProduct): Promise<Cart> {
-    const cart = await CartRepository.getUserCart(userId);
+    const cart = await this.getUserCart(userId);
     quantity ??= 1;
     return await prisma.$transaction(async (tx) => {
       if (quantity <= 0) {
@@ -113,7 +115,7 @@ export class CartRepository {
           where: { cartId: cart.id, productId },
         });
 
-        return await CartRepository.getUserCart(userId);
+        return await this.getUserCart(userId);
       }
 
       const result = await tx.cartItem.updateMany({
@@ -127,7 +129,11 @@ export class CartRepository {
         });
       }
 
-      return await CartRepository.getUserCart(userId);
+      return await this.getUserCart(userId);
     });
   }
 }
+
+const CartRepository = new CartRepositoryClass();
+
+export { CartRepository };

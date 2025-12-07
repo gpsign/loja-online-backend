@@ -1,9 +1,13 @@
 import { Prisma, Product } from "@prisma/client";
 import { prisma } from "prisma";
-import { CreateProductParams } from "types";
+import { AppRepository } from "./app.repository";
 
-export class ProductRepository {
-  static async create(data: Prisma.ProductCreateInput) {
+class ProductRepositoryClass extends AppRepository<"product"> {
+  constructor() {
+    super(prisma.product);
+  }
+
+  async create(data: Prisma.ProductCreateInput) {
     return prisma.product.create({
       data,
       include: {
@@ -12,17 +16,8 @@ export class ProductRepository {
       },
     });
   }
-
-  static async findByKey<K extends keyof Product>(
-    key: K,
-    value: NonNullable<Prisma.ProductWhereUniqueInput[K]>,
-    select: Prisma.ProductSelect | null = null
-  ) {
-    const where = { [key]: value } as unknown as Prisma.ProductWhereUniqueInput;
-
-    return prisma.product.findUnique({
-      where,
-      select,
-    });
-  }
 }
+
+const ProductRepository = new ProductRepositoryClass();
+
+export { ProductRepository };

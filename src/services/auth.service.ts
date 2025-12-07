@@ -47,7 +47,7 @@ export class AuthService {
       }
     );
 
-    await SessionRepository.createSession({
+    await SessionRepository.create({
       expiresAt: expirationDate.toDate(),
       token,
       ipAddress,

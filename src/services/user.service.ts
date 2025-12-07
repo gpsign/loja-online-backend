@@ -46,7 +46,7 @@ export class UserService {
         `User not found.\nkey: ${key}\nvalue: "${value}"`
       );
 
-    return user!;
+    return user;
   }
 
   static async validateDuplicateEmail(email: string) {

@@ -4,5 +4,5 @@ export * from "./env.type";
 export * from "./favorite.type";
 export * from "./product.type";
 export * from "./user.type";
-export * from "./utils.type";
+export * from "./app.type";
 export * from "./validation.type";

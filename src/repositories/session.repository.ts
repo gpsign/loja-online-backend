@@ -1,14 +1,13 @@
-import { Prisma, Session } from "@prisma/client";
+import { Session } from "@prisma/client";
 import { prisma } from "prisma";
+import { AppRepository } from "./app.repository";
 
-export class SessionRepository {
-  static async createSession(data: Prisma.SessionCreateInput) {
-    return prisma.session.create({
-      data,
-    });
+class SessionRepositoryClass extends AppRepository<"session"> {
+  constructor() {
+    super(prisma.session);
   }
 
-  static async findSession(token: Session["token"]) {
+  async findSession(token: Session["token"]) {
     return prisma.session.findFirst({
       where: {
         token,
@@ -16,3 +15,7 @@ export class SessionRepository {
     });
   }
 }
+
+const SessionRepository = new SessionRepositoryClass();
+
+export { SessionRepository };

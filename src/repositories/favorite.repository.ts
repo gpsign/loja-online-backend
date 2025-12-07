@@ -1,13 +1,14 @@
-import { Prisma, Product, User } from "@prisma/client";
+import { Product, User } from "@prisma/client";
 import { prisma } from "prisma";
 import { CreateFavoriteParams } from "types";
+import { AppRepository } from "./app.repository";
 
-export class FavoriteRepository {
-  static async create(data: Prisma.FavoriteCreateInput) {
-    return prisma.favorite.create({ data });
+class FavoriteRepositoryClass extends AppRepository<"favorite"> {
+  constructor() {
+    super(prisma.favorite);
   }
 
-  static async find({ userId, productId }: CreateFavoriteParams) {
+  async find({ userId, productId }: CreateFavoriteParams) {
     return prisma.favorite.findUnique({
       where: {
         userId_productId: {
@@ -21,7 +22,7 @@ export class FavoriteRepository {
     });
   }
 
-  static async findManyByUser(userId: User["id"]) {
+  async findManyByUser(userId: User["id"]) {
     return prisma.favorite.findMany({
       where: {
         userId,
@@ -32,7 +33,7 @@ export class FavoriteRepository {
     });
   }
 
-  static async delete({ userId, productId }: CreateFavoriteParams) {
+  async delete({ userId, productId }: CreateFavoriteParams) {
     return prisma.favorite.delete({
       where: {
         userId_productId: {
@@ -46,7 +47,7 @@ export class FavoriteRepository {
     });
   }
 
-  static async productFavoriteCount(productId: Product["id"]) {
+  async productFavoriteCount(productId: Product["id"]) {
     return prisma.favorite.count({
       where: {
         productId,
@@ -54,7 +55,7 @@ export class FavoriteRepository {
     });
   }
 
-  static async findManyByProduct(productId: Product["id"]) {
+  async findManyByProduct(productId: Product["id"]) {
     return prisma.favorite.findMany({
       where: {
         productId,
@@ -62,3 +63,7 @@ export class FavoriteRepository {
     });
   }
 }
+
+const FavoriteRepository = new FavoriteRepositoryClass();
+
+export { FavoriteRepository };

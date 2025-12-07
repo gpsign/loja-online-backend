@@ -1,3 +1,4 @@
+export * from "./app.repository";
 export * from "./cart.repository";
 export * from "./favorite.repository";
 export * from "./order.repository";
