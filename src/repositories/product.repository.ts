@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, Product } from "@prisma/client";
 import { prisma } from "prisma";
 import { CreateProductParams } from "types";
 
@@ -10,6 +10,19 @@ export class ProductRepository {
         images: true,
         config: true,
       },
+    });
+  }
+
+  static async findByKey<K extends keyof Product>(
+    key: K,
+    value: NonNullable<Prisma.ProductWhereUniqueInput[K]>,
+    select: Prisma.ProductSelect | null = null
+  ) {
+    const where = { [key]: value } as unknown as Prisma.ProductWhereUniqueInput;
+
+    return prisma.product.findUnique({
+      where,
+      select,
     });
   }
 }

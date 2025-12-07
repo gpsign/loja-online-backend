@@ -1,4 +1,5 @@
 import { Prisma, Product } from "@prisma/client";
+import { NotFoundError } from "errors";
 import { ProductRepository } from "repositories";
 import { CreateProductParams } from "types";
 import { ProductUtils } from "utils";
@@ -23,5 +24,20 @@ export class ProductService {
     const newProduct = await ProductRepository.create(createData);
 
     return newProduct;
+  }
+
+  static async findOrFail<K extends keyof Product>(
+    key: K,
+    value: NonNullable<Prisma.ProductWhereUniqueInput[K]>,
+    select: Prisma.ProductSelect | null = null
+  ) {
+    const product = await ProductRepository.findByKey(key, value, select);
+
+    if (!product)
+      throw new NotFoundError(
+        `Product not found.\nkey: ${key}\nvalue: "${value}"`
+      );
+
+    return product!;
   }
 }

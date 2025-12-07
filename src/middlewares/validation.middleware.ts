@@ -10,7 +10,7 @@ export const validate =
 
       const validatedData = await schema.parseAsync(data);
 
-      req[location] = validatedData;
+      if (location === "body") req[location] = validatedData;
 
       next();
     } catch (error) {
