@@ -8,6 +8,7 @@ export class UserSchema {
       email: z.email(),
       password: AuthSchema.Password,
       confirmPassword: z.string(),
+      role: z.enum(["customer", "seller"]),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "As senhas não coincidem",

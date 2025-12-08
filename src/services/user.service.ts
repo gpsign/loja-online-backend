@@ -21,7 +21,7 @@ export class UserService {
   }
 
   static async createUser(params: UserRegistrationParams): Promise<User> {
-    const { email, password, name } = params;
+    const { email, password, name, role } = params;
     await UserService.validateDuplicateEmail(email);
 
     const passwordHash = await bcrypt.hash(password, 12);
@@ -29,6 +29,7 @@ export class UserService {
       name,
       email,
       passwordHash,
+      role,
     });
   }
 

@@ -12,7 +12,7 @@ export class ProductController {
   }
 
   static async getProducts(req: Request, res: Response) {
-    const products = await ProductService.listProducts(req.body);
+    const products = await ProductService.listProducts(req.query);
     return res.status(201).json(products);
   }
 }

@@ -21,7 +21,7 @@ ProductRouter.post(
   )
   .get(
     "/products",
-    validateBody(ProductSchema.Query),
+    validateQuery(ProductSchema.Query),
     ProductController.getProducts
   );
 
