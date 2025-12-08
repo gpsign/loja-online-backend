@@ -52,7 +52,7 @@ class ProductRepositoryClass extends AppRepository<"product"> {
       prisma.product.count({ where }),
       prisma.product.findMany({
         where,
-        take: size,
+        take: Number(size),
         skip: (page - 1) * size,
         orderBy: {
           [orderBy]: orderType,
