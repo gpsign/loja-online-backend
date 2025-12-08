@@ -12,7 +12,13 @@ import { UserRegistrationParams } from "types";
 export class UserService {
   static async getUserByEmailOrFail(email: string): Promise<User> {
     const user = await UserRepository.findByEmail(email, {
-      select: { id: true, email: true, passwordHash: true },
+      select: {
+        id: true,
+        email: true,
+        passwordHash: true,
+        name: true,
+        role: true,
+      },
     });
 
     if (!user) throw new InvalidCredentialsError();

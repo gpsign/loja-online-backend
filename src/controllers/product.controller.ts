@@ -11,6 +11,15 @@ export class ProductController {
     return res.status(201).json(product);
   }
 
+  static async getProduct(req: Request, res: Response) {
+    const product = await ProductService.findOrFail(
+      "id",
+      Number(req.params.id),
+      { include: { images: true, config: true } }
+    );
+    return res.status(201).json(product);
+  }
+
   static async getProducts(req: Request, res: Response) {
     const products = await ProductService.listProducts(req.query);
     return res.status(201).json(products);

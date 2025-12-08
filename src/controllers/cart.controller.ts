@@ -39,7 +39,7 @@ export class CartController {
       quantity,
     });
 
-    res.status(200).send();
+    res.status(200).send({ quantity });
   }
 
   static async listCartItems(req: Request, res: Response) {
