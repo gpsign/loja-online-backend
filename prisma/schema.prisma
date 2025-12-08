@@ -93,8 +93,7 @@ model Product {
   price       Decimal @db.Decimal(10, 2)
 
   // Controle de Estoque
-  stockQuantity   Int     @default(0) @map("stock_quantity")
-  isStockInfinite Boolean @default(true) @map("is_stock_infinite")
+  stockQuantity Int @default(0) @map("stock_quantity")
 
   // Status
   status      ProductStatus @default(active)
@@ -116,11 +115,10 @@ model Product {
 }
 
 model ProductConfig {
-  productId              Int      @id @map("product_id")
-  showStockWarning       Boolean? @map("show_stock_warning") // Nullable para herança
-  stockThresholdOverride Int?     @map("stock_threshold_override")
-
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId        Int      @id @map("product_id")
+  showStockWarning Boolean? @map("show_stock_warning")
+  isStockInfinite  Boolean  @default(true) @map("is_stock_infinite")
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("product_configs")
 }

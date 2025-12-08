@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Product, ProductConfig, User } from "@prisma/client";
 import { BadRequestError, ConflictError } from "errors";
 import { prisma } from "prisma";
 import {
@@ -21,21 +21,13 @@ export class OrderService {
     const productsToUpdateStock: { id: number; newStock: number }[] = [];
 
     for (const item of cart.items) {
-      const productData = await ProductRepository.findByKey(
+      const productData = (await ProductRepository.findByKey(
         "id",
         item.productId,
         {
-          select: {
-            name: true,
-            id: true,
-            price: true,
-            sellerId: true,
-            stockQuantity: true,
-            isStockInfinite: true,
-            status: true,
-          },
+          include: { config: true },
         }
-      );
+      )) as Product & { config: ProductConfig | null };
 
       const inactive = Boolean(productData?.status !== "active");
 
@@ -48,7 +40,7 @@ export class OrderService {
         );
 
       const sufficientStock =
-        productData.isStockInfinite ||
+        productData.config?.isStockInfinite != false ||
         productData.stockQuantity >= item.quantity;
 
       if (!sufficientStock)
@@ -69,7 +61,7 @@ export class OrderService {
         unitPrice: unitPrice,
       });
 
-      if (productData.isStockInfinite) continue;
+      if (productData.config?.isStockInfinite != false) continue;
 
       productsToUpdateStock.push({
         id: productData.id,
@@ -99,5 +91,20 @@ export class OrderService {
       },
       { isolationLevel: "Serializable" }
     );
+  }
+
+  static async getOrders(userId: User["id"]) {
+    const cart = await OrderRepository.findManyByKey("customerId", userId, {
+      include: {
+        items: {
+          include: {
+            product: {
+              include: { images: { where: { isCover: true }, take: 1 } },
+            },
+          },
+        },
+      },
+    });
+    return cart;
   }
 }

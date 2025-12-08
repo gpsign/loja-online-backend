@@ -8,15 +8,20 @@ export class ProductSchema {
     displayOrder: z.number().optional(),
   });
 
+  static Config = z.object({
+    isStockInfinite: z.boolean().optional(),
+    showStockWarning: z.boolean().optional(),
+  });
+
   static Create = z.object({
     name: z.string().min(3),
     price: z.number().min(0),
     description: z.string().min(3).optional(),
     categoryId: z.number().min(0).optional(),
     stockQuantity: z.number().min(0).optional(),
-    isStockInfinite: z.boolean().optional(),
     status: z.boolean().optional(),
     images: z.array(ProductSchema.Image).optional(),
+    config: ProductSchema.Config.optional(),
   });
 
   static Query = z.object({

@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { Prisma } from "@prisma/client";
-import { prisma } from "../src/prisma";
 import bcrypt from "bcrypt";
+import { prisma } from "../src/prisma";
 
 async function main() {
   const sellers = await Promise.all(
@@ -38,20 +38,28 @@ async function main() {
         description: faker.commerce.productDescription(),
         price: new Prisma.Decimal(faker.commerce.price({ min: 5, max: 2000 })),
         stockQuantity: faker.number.int({ min: 0, max: 200 }),
-        isStockInfinite: faker.datatype.boolean({ probability: 0.3 }),
         status: "active",
         publishedAt: faker.date.past(),
+        config: {
+          create: {
+            isStockInfinite: faker.datatype.boolean({ probability: 0.6 }),
+            showStockWarning: faker.datatype.boolean({ probability: 0.3 }),
+          },
+        },
       },
     });
 
-    const imageCount = faker.number.int({ min: 1, max: 4 });
+    const imageCount = faker.number.int({ min: 0, max: 8 });
 
     await Promise.all(
       Array.from({ length: imageCount }).map((_, index) =>
         prisma.productImage.create({
           data: {
             productId: product.id,
-            imageUrl: faker.image.url({ height: 100, width: 100 }),
+            imageUrl: faker.image.url({
+              height: faker.number.int({ min: 175, max: 1080 }),
+              width: faker.number.int({ min: 320, max: 1920 }),
+            }),
             isCover: index === 0,
             displayOrder: index,
           },

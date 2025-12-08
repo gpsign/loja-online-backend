@@ -26,6 +26,19 @@ export abstract class AppRepository<ModelName extends ModelKeys> {
     });
   }
 
+  async findManyByKey<K extends RealUniqueKeys<ModelName>>(
+    key: K,
+    value: NonNullable<WhereUnique<ModelName>[K]>,
+    args?: FindByKeyConfig<ModelName>
+  ): Promise<FindUniqueReturn<ModelName>> {
+    const where = { [key]: value } as unknown as WhereUnique<ModelName>;
+
+    return (this.delegate as any).findMany({
+      where,
+      ...args,
+    });
+  }
+
   async create(
     data: DataCreate<ModelName>,
     args?: Pick<CreateArgs<ModelName>, "select" | "omit" | "include">

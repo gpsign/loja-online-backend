@@ -8,7 +8,6 @@ export interface CreateProductParams {
   categoryId?: number;
   sku?: string;
   stockQuantity: number;
-  isStockInfinite: boolean;
   status?: ProductStatus;
 
   images?: {
@@ -18,6 +17,7 @@ export interface CreateProductParams {
   }[];
 
   config?: {
+    isStockInfinite: boolean;
     showStockWarning?: boolean;
     stockThresholdOverride?: number;
   };

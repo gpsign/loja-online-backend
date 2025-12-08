@@ -10,4 +10,12 @@ export class OrderController {
 
     res.status(201).send(order);
   }
+
+  static async getOrders(req: Request, res: Response) {
+    const userId = (req as AuthRequest).userId;
+
+    const orders = await OrderService.getOrders(userId);
+
+    res.status(201).send(orders);
+  }
 }

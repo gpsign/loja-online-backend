@@ -1,4 +1,4 @@
-import { Product } from "@prisma/client";
+import { Product, ProductConfig } from "@prisma/client";
 import _ from "lodash";
 import { CreateProductParams } from "types";
 
@@ -24,8 +24,11 @@ export class ProductUtils {
     return product && product.status === "active";
   }
 
-  static isStockAvailable(product: Product, quantity: number) {
-    if (!quantity || product.isStockInfinite) return true;
+  static isStockAvailable(
+    product: Product & { config?: ProductConfig },
+    quantity: number
+  ) {
+    if (!quantity || product.config?.isStockInfinite != false) return true;
     return product.stockQuantity >= quantity;
   }
 }

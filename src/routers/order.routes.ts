@@ -3,6 +3,9 @@ import { Router } from "express";
 
 const OrderRouter = Router();
 
-OrderRouter.post("/orders", OrderController.postOrder);
+OrderRouter.post("/orders", OrderController.postOrder).get(
+  "/orders",
+  OrderController.getOrders
+);
 
 export { OrderRouter };

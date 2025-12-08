@@ -25,7 +25,7 @@ export class CartController {
       productId,
     });
 
-    res.status(200).send();
+    res.status(200).send({ productId });
   }
 
   static async updateQuantity(req: Request, res: Response) {
