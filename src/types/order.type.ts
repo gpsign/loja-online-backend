@@ -4,13 +4,20 @@ import { TransactionTx } from "./app.type";
 export type CreateOrder = {
   customerId: User["id"];
   totalAmount: number;
-  items: Omit<OrderItem, "id">[];
+  items: CreateOrderItem[];
   tx: TransactionTx;
 };
+
+export interface CreateOrderItem
+  extends Omit<OrderItem, "id" | "orderId" | "unitPrice" | "subtotal"> {
+  unitPrice: number;
+  subtotal: number;
+}
 
 export type OrderItemSnapshot = {
   productId: Product["id"];
   sellerId: User["id"];
   quantity: number;
   unitPrice: number;
+  subtotal: number;
 };

@@ -14,6 +14,11 @@ enum Role {
   admin
 }
 
+enum UserStatus {
+  active
+  inactive
+}
+
 enum ProductStatus {
   active
   inactive
@@ -36,6 +41,8 @@ model User {
   role         Role     @default(customer)
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @default(now()) @updatedAt @map("updated_at")
+
+  status UserStatus @default(active)
 
   sessions  Session[]
   products  Product[]   @relation("SellerProducts")

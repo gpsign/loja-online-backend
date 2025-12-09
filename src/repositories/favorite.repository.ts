@@ -28,7 +28,13 @@ class FavoriteRepositoryClass extends AppRepository<"favorite"> {
         userId,
       },
       include: {
-        product: true,
+        product: {
+          include: {
+            images: {
+              where: { isCover: true },
+            },
+          },
+        },
       },
     });
   }

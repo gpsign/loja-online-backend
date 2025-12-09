@@ -18,6 +18,13 @@ class ProductRepositoryClass extends AppRepository<"product"> {
     });
   }
 
+  async findManyByUser(userId: User["id"]) {
+    return prisma.product.findMany({
+      where: { sellerId: userId },
+      include: { images: { where: { isCover: true }, take: 1 }, config: true },
+    });
+  }
+
   async findAll(
     params: ProductQueryConfig & { userId: User["id"] }
   ): Promise<ProductQueryResult<Product>> {
@@ -59,6 +66,7 @@ class ProductRepositoryClass extends AppRepository<"product"> {
           [orderBy]: orderType,
         },
         include: {
+          config: true,
           images: {
             where: { isCover: true },
             take: 1,

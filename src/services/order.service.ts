@@ -59,6 +59,7 @@ export class OrderService {
         sellerId: productData.sellerId,
         quantity: item.quantity,
         unitPrice: unitPrice,
+        subtotal,
       });
 
       if (productData.config?.isStockInfinite != false) continue;
@@ -75,7 +76,7 @@ export class OrderService {
           tx,
           customerId: userId,
           totalAmount,
-          items: orderItems as any,
+          items: orderItems,
         });
 
         const stockPromises = productsToUpdateStock.map((p) =>

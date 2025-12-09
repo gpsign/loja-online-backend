@@ -1,11 +1,6 @@
-import { Product } from "@prisma/client";
 import { Request, Response } from "express";
 import { ProductService } from "services";
-import {
-  AuthRequest,
-  CreateProductParams,
-  MassCreateProductParams,
-} from "types";
+import { AuthRequest, MassCreateProductParams } from "types";
 
 export class ProductController {
   static async createProduct(req: Request, res: Response) {

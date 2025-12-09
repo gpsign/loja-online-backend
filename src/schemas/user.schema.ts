@@ -14,4 +14,12 @@ export class UserSchema {
       message: "As senhas não coincidem",
       path: ["confirmPassword"],
     });
+
+  static GetProducts = z.object({
+    id: z.coerce.number(),
+  });
+
+  static PatchStatus = z.object({
+    status: z.enum(["active", "inactive"]),
+  });
 }

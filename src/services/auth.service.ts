@@ -7,7 +7,7 @@ import { Utils } from "utils";
 import { User } from "@prisma/client";
 import { AppEnv } from "config";
 import { CreateSessionParams, SignInParams } from "types";
-import dayjs from "dayjs";
+import { addHours, getUnixTime } from "date-fns";
 
 export class AuthService {
   static async signIn(
@@ -37,15 +37,15 @@ export class AuthService {
     ipAddress,
     userAgent,
   }: CreateSessionParams) {
-    const expirationDate = dayjs().add(1, "hour");
+    const expirationDate = addHours(new Date(), 1);
 
     const token = jwt.sign(
-      { userId, ipAddress, userAgent, exp: expirationDate.unix() },
+      { userId, ipAddress, userAgent, exp: getUnixTime(expirationDate) },
       AppEnv.JWT_SECRET
     );
 
     await SessionRepository.create({
-      expiresAt: expirationDate.toDate(),
+      expiresAt: expirationDate,
       token,
       ipAddress,
       userAgent,

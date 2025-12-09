@@ -1,6 +1,6 @@
 import { Prisma, Product, User } from "@prisma/client";
 import { NotFoundError } from "errors";
-import { ProductRepository } from "repositories";
+import { ProductRepository, UserRepository } from "repositories";
 import {
   CreateProductParams,
   FindByKeyConfig,
@@ -16,6 +16,8 @@ export class ProductService {
       ...restParams,
       seller: { connect: { id: sellerId } },
     };
+
+    console.log(config);
 
     if (config) {
       createData.config = { create: config };
@@ -43,6 +45,12 @@ export class ProductService {
       );
 
     return product;
+  }
+
+  static async listUserProducts(userId: User["id"]) {
+    const user = await UserRepository.findById(userId);
+    if (!user) throw new NotFoundError("Usuário não encontrado");
+    return await ProductRepository.findManyByUser(userId);
   }
 
   static async listProducts(

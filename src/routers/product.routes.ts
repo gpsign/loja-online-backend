@@ -13,7 +13,7 @@ ProductRouter.post(
 )
   .post("/products/:id/favorites", FavoriteController.addToFavorites)
   .delete("/products/:id/favorites", FavoriteController.removeFromFavorites)
-  .get("/products/:id/favorites", FavoriteController.getUserFavorites)
+  .get("/favorites", FavoriteController.getUserFavorites)
   .get(
     "/products/favorites",
     validateQuery(FavoriteSchema.Query),

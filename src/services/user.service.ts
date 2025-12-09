@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import {
   AppError,
   ConflictError,
+  ForbiddenError,
   InvalidCredentialsError,
   NotFoundError,
 } from "errors";
@@ -18,6 +19,7 @@ export class UserService {
         passwordHash: true,
         name: true,
         role: true,
+        status: true,
       },
     });
 
@@ -62,5 +64,25 @@ export class UserService {
         "USER_ALREADY_EXISTS"
       );
     }
+  }
+
+  static async changeStatus(
+    userId: number,
+    status: User["status"],
+    senderId: number
+  ) {
+    const [user, sender] = await Promise.all([
+      UserService.findOrFail("id", userId),
+      UserService.findOrFail("id", senderId),
+    ]);
+
+    if (senderId != userId && sender.role != "admin")
+      throw new ForbiddenError(
+        "Você não tem permissão para alterar o status de outro usuário"
+      );
+
+    if (user.status === status) return;
+
+    await UserRepository.updateUserStatus(userId, status);
   }
 }

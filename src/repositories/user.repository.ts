@@ -21,6 +21,28 @@ class UserRepositoryClass extends AppRepository<"user"> {
       data,
     });
   }
+
+  async updateUserStatus(userId: number, newStatus: User["status"]) {
+    const shouldDeactivateProducts = newStatus === "inactive";
+
+    if (!shouldDeactivateProducts)
+      return prisma.user.update({
+        where: { id: userId },
+        data: { status: newStatus },
+      });
+
+    return prisma.$transaction([
+      prisma.user.update({
+        where: { id: userId },
+        data: { status: newStatus },
+      }),
+
+      prisma.product.updateMany({
+        where: { sellerId: userId },
+        data: { status: "inactive" },
+      }),
+    ]);
+  }
 }
 const UserRepository = new UserRepositoryClass();
 
