@@ -10,18 +10,36 @@ export class ProductSchema {
 
   static Config = z.object({
     isStockInfinite: z.boolean().optional(),
-    showStockWarning: z.boolean().optional(),
+    showStock: z.boolean().optional(),
   });
 
-  static Create = z.object({
+  static Product = z.object({
     name: z.string().min(3),
     price: z.number().min(0),
     description: z.string().min(3).optional(),
     categoryId: z.number().min(0).optional(),
     stockQuantity: z.number().min(0).optional(),
-    status: z.boolean().optional(),
+    status: z.enum(["active", "inactive"]).optional(),
     images: z.array(ProductSchema.Image).optional(),
     config: ProductSchema.Config.optional(),
+  });
+
+  static MultipleProducts = z.object({
+    products: z.array(ProductSchema.Product),
+  });
+
+  static Create = z.custom<any>().superRefine((data, ctx) => {
+    if (data && typeof data === "object" && "products" in data) {
+      const result = ProductSchema.MultipleProducts.safeParse(data);
+      if (result.success) return;
+      result.error.issues.forEach((issue) => ctx.addIssue(issue as any));
+      return;
+    }
+
+    const result = ProductSchema.Product.safeParse(data);
+
+    if (result.success) return;
+    result.error.issues.forEach((issue) => ctx.addIssue(issue as any));
   });
 
   static Query = z.object({

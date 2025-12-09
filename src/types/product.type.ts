@@ -18,10 +18,13 @@ export interface CreateProductParams {
 
   config?: {
     isStockInfinite: boolean;
-    showStockWarning?: boolean;
-    stockThresholdOverride?: number;
+    showStock?: boolean;
   };
 }
+
+export type MassCreateProductParams =
+  | CreateProductParams
+  | { products: CreateProductParams[] };
 
 export interface ProductQueryConfig {
   page?: number;

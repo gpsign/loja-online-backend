@@ -43,7 +43,7 @@ async function main() {
         config: {
           create: {
             isStockInfinite: faker.datatype.boolean({ probability: 0.6 }),
-            showStockWarning: faker.datatype.boolean({ probability: 0.3 }),
+            showStock: faker.datatype.boolean({ probability: 0.8 }),
           },
         },
       },

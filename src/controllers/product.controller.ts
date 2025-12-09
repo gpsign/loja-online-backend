@@ -1,14 +1,31 @@
+import { Product } from "@prisma/client";
 import { Request, Response } from "express";
 import { ProductService } from "services";
-import { AuthRequest, CreateProductParams } from "types";
+import {
+  AuthRequest,
+  CreateProductParams,
+  MassCreateProductParams,
+} from "types";
 
 export class ProductController {
   static async createProduct(req: Request, res: Response) {
-    const data = req.body as CreateProductParams;
-    data.sellerId = (req as AuthRequest).userId;
-    const product = await ProductService.createProduct(data);
+    const data = req.body as MassCreateProductParams;
 
-    return res.status(201).json(product);
+    const products = [];
+
+    if ("products" in data) products.push(...data.products);
+    else products.push(data);
+
+    const promises = [];
+
+    for (const product of products) {
+      product.sellerId = (req as AuthRequest).userId;
+      promises.push(ProductService.createProduct(product));
+    }
+
+    const created = await Promise.all(promises);
+
+    return res.status(201).json(created);
   }
 
   static async getProduct(req: Request, res: Response) {

@@ -37,7 +37,7 @@ export class AuthService {
     ipAddress,
     userAgent,
   }: CreateSessionParams) {
-    const expirationDate = dayjs().add(7, "days");
+    const expirationDate = dayjs().add(5, "second");
 
     const token = jwt.sign(
       { userId, ipAddress, userAgent },
