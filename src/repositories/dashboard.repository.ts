@@ -1,5 +1,5 @@
-import { prisma } from "prisma";
-import { BestSellerData, DashboardFilterDTO } from "types";
+import { prisma } from "@/prisma";
+import { BestSellerData, DashboardFilterDTO } from "@types";
 
 export class DashboardRepository {
   static async getEarliestActivityDate(sellerId: number): Promise<Date | null> {

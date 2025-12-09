@@ -1,8 +1,7 @@
-import { FavoriteController } from "controllers";
-import { ProductController } from "controllers/product.controller";
+import { FavoriteController, ProductController } from "@controllers";
 import { Router } from "express";
-import { validateBody, validateQuery } from "middlewares";
-import { FavoriteSchema, ProductSchema } from "schemas";
+import { validateBody, validateQuery } from "@middlewares";
+import { FavoriteSchema, ProductSchema } from "@schemas";
 
 const ProductRouter = Router();
 

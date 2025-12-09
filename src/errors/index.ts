@@ -1,8 +1,7 @@
-export * from "./app.error";
-export * from "./bad-request.error";
-export * from "./conflict.error";
-export * from "./forbidden.error";
-export * from "./invalid-credentials.error";
-export * from "./not-found.error";
-export * from "./unauthorized.error";
-
+export * from "./app.error.js";
+export * from "./bad-request.error.js";
+export * from "./conflict.error.js";
+export * from "./forbidden.error.js";
+export * from "./invalid-credentials.error.js";
+export * from "./not-found.error.js";
+export * from "./unauthorized.error.js";

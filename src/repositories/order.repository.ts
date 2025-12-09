@@ -1,7 +1,7 @@
 import { Order, OrderStatus } from "@prisma/client";
-import { prisma } from "prisma";
-import { CreateOrder } from "types";
-import { AppRepository } from "./app.repository";
+import { prisma } from "@/prisma";
+import { CreateOrder } from "@types";
+import { AppRepository } from "./app.repository.js";
 class OrderRepositoryClass extends AppRepository<"order"> {
   constructor() {
     super(prisma.order);

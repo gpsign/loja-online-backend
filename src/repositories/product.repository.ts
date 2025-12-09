@@ -1,11 +1,11 @@
 import { Prisma, Product, User } from "@prisma/client";
-import { prisma } from "prisma";
+import { prisma } from "@/prisma";
 import {
   CreateProductParams,
   ProductQueryConfig,
   ProductQueryResult,
-} from "types";
-import { AppRepository } from "./app.repository";
+} from "@types";
+import { AppRepository } from "./app.repository.js";
 
 class ProductRepositoryClass extends AppRepository<"product"> {
   constructor() {

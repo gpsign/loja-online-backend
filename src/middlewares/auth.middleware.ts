@@ -1,9 +1,9 @@
-import { AppEnv } from "config";
-import { UnauthorizedError } from "errors";
+import { AppEnv } from "@config";
+import { UnauthorizedError } from "@errors";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { SessionRepository } from "repositories";
-import { AuthRequest, UserJWTData } from "types";
+import { SessionRepository } from "@repositories";
+import { AuthRequest, UserJWTData } from "@types";
 
 export async function authenticateToken(
   req: Request,

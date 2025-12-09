@@ -1,7 +1,7 @@
-import { CartController } from "controllers";
+import { CartController } from "@controllers";
 import { Router } from "express";
-import { validateBody } from "middlewares";
-import { CartSchema } from "schemas";
+import { validateBody } from "@middlewares";
+import { CartSchema } from "@schemas";
 
 const CartRouter = Router();
 

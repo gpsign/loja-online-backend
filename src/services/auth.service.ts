@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserService } from "services";
-import { SessionRepository } from "repositories";
-import { InvalidCredentialsError } from "errors";
-import { Utils } from "utils";
+import { UserService } from "@services";
+import { SessionRepository } from "@repositories";
+import { InvalidCredentialsError } from "@errors";
+import { Utils } from "@utils";
 import { User } from "@prisma/client";
-import { AppEnv } from "config";
-import { CreateSessionParams, SignInParams } from "types";
+import { AppEnv } from "@config";
+import { CreateSessionParams, SignInParams } from "@types";
 import { addHours, getUnixTime } from "date-fns";
 
 export class AuthService {

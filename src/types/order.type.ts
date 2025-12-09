@@ -1,5 +1,5 @@
 import { OrderItem, Product, User } from "@prisma/client";
-import { TransactionTx } from "./app.type";
+import { TransactionTx } from "./app.type.js";
 
 export type CreateOrder = {
   customerId: User["id"];

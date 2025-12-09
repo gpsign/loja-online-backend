@@ -1,2 +1,2 @@
-export * from "./zod.config";
-export * from "./env.config";
+export * from "./zod.config.js";
+export * from "./env.config.js";

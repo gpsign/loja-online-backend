@@ -1,6 +1,5 @@
-import { loadZod } from "config/zod.config.js";
+import { loadZod, AppEnv } from "@config";
 import app from "./app.js";
-import { AppEnv } from "config/env.config.js";
 
 loadZod();
 

@@ -1,12 +1,12 @@
 import { Product, ProductConfig, User } from "@prisma/client";
-import { BadRequestError, ConflictError } from "errors";
-import { prisma } from "prisma";
+import { BadRequestError, ConflictError } from "@errors";
+import { prisma } from "@/prisma";
 import {
   CartRepository,
   OrderRepository,
   ProductRepository,
-} from "repositories";
-import { OrderItemSnapshot } from "types";
+} from "@repositories";
+import { OrderItemSnapshot } from "@types";
 
 export class OrderService {
   static async orderCart(userId: User["id"]) {

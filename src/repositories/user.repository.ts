@@ -1,7 +1,7 @@
 import { Prisma, User } from "@prisma/client";
-import { prisma } from "prisma";
-import { AppRepository } from "./app.repository";
-import { FindByKeyConfig } from "types";
+import { prisma } from "@/prisma";
+import { AppRepository } from "./app.repository.js";
+import { FindByKeyConfig } from "@types";
 
 class UserRepositoryClass extends AppRepository<"user"> {
   constructor() {

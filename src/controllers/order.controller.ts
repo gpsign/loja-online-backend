@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { OrderService } from "services";
-import { AuthRequest } from "types";
+import { OrderService } from "@services";
+import { AuthRequest } from "@types";
 
 export class OrderController {
   static async postOrder(req: Request, res: Response) {

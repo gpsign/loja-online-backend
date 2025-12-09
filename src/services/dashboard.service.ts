@@ -7,13 +7,13 @@ import {
   subDays,
 } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ForbiddenError } from "errors";
-import { DashboardRepository, UserRepository } from "repositories";
+import { ForbiddenError } from "@errors";
+import { DashboardRepository, UserRepository } from "@repositories";
 import {
   DashboardChartData,
   DashboardFilterDTO,
   DashboardResponse,
-} from "types";
+} from "@types";
 
 function isValid(str: unknown): str is string {
   if (typeof str != "string") return false;

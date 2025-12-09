@@ -1,4 +1,4 @@
-import { AnyObject } from "types";
+import { AnyObject } from "@types";
 
 export class Utils {
   static nvl<T>(...values: Array<T | undefined>): T | null {

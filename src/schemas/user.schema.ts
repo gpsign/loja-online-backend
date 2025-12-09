@@ -1,5 +1,5 @@
 import z from "zod";
-import { AuthSchema } from "./auth.schema";
+import { AuthSchema } from "./auth.schema.js";
 
 export class UserSchema {
   static Registration = z

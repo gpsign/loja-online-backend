@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { CartService } from "services";
-import { AuthRequest } from "types";
+import { CartService } from "@services";
+import { AuthRequest } from "@types";
 
 export class CartController {
   static async addToCart(req: Request, res: Response) {

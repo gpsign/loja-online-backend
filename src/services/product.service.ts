@@ -1,13 +1,13 @@
 import { Prisma, Product, User } from "@prisma/client";
-import { ForbiddenError, NotFoundError } from "errors";
-import { ProductRepository, UserRepository } from "repositories";
+import { ForbiddenError, NotFoundError } from "@errors";
+import { ProductRepository, UserRepository } from "@repositories";
 import {
   CreateProductParams,
   FindByKeyConfig,
   ProductQueryConfig,
-} from "types";
-import { ProductUtils } from "utils";
-import { UserService } from "./user.service";
+} from "@types";
+import { ProductUtils } from "@utils";
+import { UserService } from "./user.service.js";
 
 export class ProductService {
   static async createProduct(params: CreateProductParams): Promise<Product> {

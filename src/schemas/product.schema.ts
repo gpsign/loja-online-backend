@@ -1,5 +1,5 @@
 import z from "zod";
-import { AppSchema } from "./app.schema";
+import { AppSchema } from "./app.schema.js";
 
 export class ProductSchema {
   static Image = z.object({

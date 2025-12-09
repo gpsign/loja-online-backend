@@ -1,6 +1,6 @@
 import { Session } from "@prisma/client";
-import { prisma } from "prisma";
-import { AppRepository } from "./app.repository";
+import { AppRepository } from "@repositories";
+import { prisma } from "@/prisma";
 
 class SessionRepositoryClass extends AppRepository<"session"> {
   constructor() {

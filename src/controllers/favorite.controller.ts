@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { FavoriteService } from "services";
-import { AuthRequest } from "types";
+import { FavoriteService } from "@services";
+import { AuthRequest } from "@types";
 
 export class FavoriteController {
   static async addToFavorites(req: Request, res: Response) {

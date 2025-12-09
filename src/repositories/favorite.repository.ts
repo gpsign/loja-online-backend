@@ -1,7 +1,7 @@
 import { Product, User } from "@prisma/client";
-import { prisma } from "prisma";
-import { CreateFavoriteParams } from "types";
-import { AppRepository } from "./app.repository";
+import { prisma } from "@/prisma";
+import { CreateFavoriteParams } from "@types";
+import { AppRepository } from "./app.repository.js";
 
 class FavoriteRepositoryClass extends AppRepository<"favorite"> {
   constructor() {

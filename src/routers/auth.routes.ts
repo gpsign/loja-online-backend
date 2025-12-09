@@ -1,7 +1,7 @@
-import { AuthController } from "controllers";
+import { AuthController } from "@controllers";"middlewares"
 import { Router } from "express";
-import { validateBody } from "middlewares";
-import { AuthSchema } from "schemas";
+import { validateBody } from "@middlewares";
+import { AuthSchema } from "@schemas";
 
 const AuthRouter = Router();
 

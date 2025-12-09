@@ -1,3 +1,3 @@
-export * from "./auth.middleware";
-export * from "./global-error-handler.middleware";
-export * from "./validation.middleware";
+export * from "./auth.middleware.js";
+export * from "./global-error-handler.middleware.js";
+export * from "./validation.middleware.js";

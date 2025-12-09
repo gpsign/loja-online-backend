@@ -6,9 +6,9 @@ import {
   ForbiddenError,
   InvalidCredentialsError,
   NotFoundError,
-} from "errors";
-import { UserRepository } from "repositories";
-import { UserRegistrationParams } from "types";
+} from "@errors";
+import { UserRepository } from "@repositories";
+import { UserRegistrationParams } from "@types";
 
 export class UserService {
   static async getUserByEmailOrFail(email: string): Promise<User> {

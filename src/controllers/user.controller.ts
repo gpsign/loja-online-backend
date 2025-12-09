@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ProductService, UserService } from "services";
-import { AuthRequest, UserRegistrationParams } from "types";
+import { ProductService, UserService } from "@services";
+import { AuthRequest, UserRegistrationParams } from "@types";
 
 export class UserControler {
   static async signUser(req: Request, res: Response) {

@@ -1,8 +1,8 @@
 import { Product, User } from "@prisma/client";
-import { FavoriteRepository } from "repositories";
-import { CreateFavoriteParams } from "types";
-import { ProductService } from "./product.service";
-import { UserService } from "./user.service";
+import { FavoriteRepository } from "@repositories";
+import { CreateFavoriteParams } from "@types";
+import { ProductService } from "./product.service.js";
+import { UserService } from "./user.service.js";
 
 export class FavoriteService {
   static async addToFavorite({ productId, userId }: CreateFavoriteParams) {

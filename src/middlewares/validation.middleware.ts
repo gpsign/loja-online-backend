@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { RequestLocation } from "types";
+import { RequestLocation } from "@types";
 import { ZodType } from "zod";
 
 export const validate =

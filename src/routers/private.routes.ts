@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { authenticateToken } from "middlewares";
-import { CartRouter } from "./cart.routes";
-import { OrderRouter } from "./order.routes";
-import { ProductRouter } from "./product.routes";
-import { DashboardRouter } from "./dashboard.routes";
+import { authenticateToken } from "@middlewares";
+import { CartRouter } from "./cart.routes.js";
+import { OrderRouter } from "./order.routes.js";
+import { ProductRouter } from "./product.routes.js";
+import { DashboardRouter } from "./dashboard.routes.js";
 
 const PrivateRouter = Router();
 

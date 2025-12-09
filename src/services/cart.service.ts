@@ -1,10 +1,10 @@
 import { User } from "@prisma/client";
-import { ConflictError } from "errors";
-import { CartRepository } from "repositories";
-import { CartUserProduct } from "types";
-import { ProductUtils } from "utils";
-import { ProductService } from "./product.service";
-import { UserService } from "./user.service";
+import { ConflictError } from "@errors";
+import { CartRepository } from "@repositories";
+import { CartUserProduct } from "@types";
+import { ProductUtils } from "@utils";
+import { ProductService } from "./product.service.js";
+import { UserService } from "./user.service.js";
 
 export class CartService {
   static async addToUserCart({ userId, productId, quantity }: CartUserProduct) {

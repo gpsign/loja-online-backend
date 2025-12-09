@@ -1,7 +1,7 @@
-import { AuthService } from "services";
+import { AuthService } from "@services";
 import { Request, Response } from "express";
-import { SignInParams } from "types";
-import { Utils } from "utils";
+import { SignInParams } from "@types";
+import { Utils } from "@utils";
 
 export class AuthController {
   static async signIn(req: Request, res: Response) {

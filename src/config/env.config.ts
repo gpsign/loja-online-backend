@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Env } from "types";
+import { Env } from "@types";
 
 const REQUIRED_KEYS = ["JWT_SECRET", "DATABASE_URL"] as const;
 

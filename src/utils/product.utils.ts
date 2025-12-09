@@ -1,6 +1,6 @@
 import { Product, ProductConfig } from "@prisma/client";
 import _ from "lodash";
-import { CreateProductParams } from "types";
+import { CreateProductParams } from "@types";
 
 export class ProductUtils {
   static prepareImages(images: CreateProductParams["images"]) {

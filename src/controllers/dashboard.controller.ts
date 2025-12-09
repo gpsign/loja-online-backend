@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { DashboardService } from "services/dashboard.service";
-import { AuthRequest } from "types";
+import { DashboardService } from "@services";
+import { AuthRequest } from "@types";
 
 export class DashboardController {
   static async getMetrics(req: Request, res: Response) {

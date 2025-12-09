@@ -1,7 +1,7 @@
-import { UserControler } from "controllers";
+import { UserControler } from "@controllers";
 import { Router } from "express";
-import { authenticateToken, validateBody, validateParams } from "middlewares";
-import { UserSchema } from "schemas";
+import { authenticateToken, validateBody, validateParams } from "@middlewares";
+import { UserSchema } from "@schemas";
 
 const UserRouter = Router();
 

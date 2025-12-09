@@ -8,7 +8,7 @@ import {
   ModelKeys,
   RealUniqueKeys,
   WhereUnique,
-} from "types";
+} from "@types";
 
 export abstract class AppRepository<ModelName extends ModelKeys> {
   constructor(protected delegate: PrismaClient[ModelName]) {}

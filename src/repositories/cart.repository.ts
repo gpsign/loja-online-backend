@@ -1,7 +1,7 @@
 import { Cart, User } from "@prisma/client";
-import { prisma } from "prisma";
-import { CartUserProduct } from "types";
-import { AppRepository } from "./app.repository";
+import { prisma } from "@/prisma";
+import { CartUserProduct } from "@types";
+import { AppRepository } from "./app.repository.js";
 
 class CartRepositoryClass extends AppRepository<"cart"> {
   constructor() {
