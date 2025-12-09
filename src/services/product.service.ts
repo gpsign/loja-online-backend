@@ -1,4 +1,4 @@
-import { Prisma, Product } from "@prisma/client";
+import { Prisma, Product, User } from "@prisma/client";
 import { NotFoundError } from "errors";
 import { ProductRepository } from "repositories";
 import {
@@ -45,7 +45,9 @@ export class ProductService {
     return product;
   }
 
-  static async listProducts(params: ProductQueryConfig) {
+  static async listProducts(
+    params: ProductQueryConfig & { userId: User["id"] }
+  ) {
     return await ProductRepository.findAll(params);
   }
 }

@@ -1,4 +1,4 @@
-import { Prisma, Product } from "@prisma/client";
+import { Prisma, Product, User } from "@prisma/client";
 import { prisma } from "prisma";
 import { ProductQueryConfig, ProductQueryResult } from "types";
 import { AppRepository } from "./app.repository";
@@ -19,9 +19,10 @@ class ProductRepositoryClass extends AppRepository<"product"> {
   }
 
   async findAll(
-    params: ProductQueryConfig
+    params: ProductQueryConfig & { userId: User["id"] }
   ): Promise<ProductQueryResult<Product>> {
     const {
+      userId,
       page = 1,
       size = 10,
       search,
@@ -61,6 +62,14 @@ class ProductRepositoryClass extends AppRepository<"product"> {
           images: {
             where: { isCover: true },
             take: 1,
+          },
+          favoritedBy: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
           },
           seller: {
             select: { name: true },

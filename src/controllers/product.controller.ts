@@ -29,16 +29,33 @@ export class ProductController {
   }
 
   static async getProduct(req: Request, res: Response) {
+    const userId = (req as AuthRequest).userId;
     const product = await ProductService.findOrFail(
       "id",
       Number(req.params.id),
-      { include: { images: true, config: true } }
+      {
+        include: {
+          images: true,
+          config: true,
+          favoritedBy: {
+            where: {
+              userId,
+            },
+            select: {
+              userId: true,
+            },
+          },
+        },
+      }
     );
     return res.status(201).json(product);
   }
 
   static async getProducts(req: Request, res: Response) {
-    const products = await ProductService.listProducts(req.query);
+    const products = await ProductService.listProducts({
+      ...req.query,
+      userId: (req as AuthRequest).userId,
+    });
     return res.status(201).json(products);
   }
 }

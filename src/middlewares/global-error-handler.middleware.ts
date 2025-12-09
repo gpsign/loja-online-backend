@@ -25,6 +25,7 @@ export const globalErrorHandler = (
       status: "error",
       code: err.code,
       message: err.message,
+      action: err.action,
     });
   }
 

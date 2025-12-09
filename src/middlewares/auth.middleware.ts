@@ -16,12 +16,16 @@ export async function authenticateToken(
   const token = authHeader.split(" ")[1];
   if (!token) throw new UnauthorizedError();
 
-  const userData = jwt.verify(token, AppEnv.JWT_SECRET) as UserJWTData;
-
   const session = await SessionRepository.findSession(token);
   if (!session) throw new UnauthorizedError();
 
-  (req as AuthRequest).userId = userData.userId;
+  try {
+    const userData = jwt.verify(token, AppEnv.JWT_SECRET) as UserJWTData;
 
-  next();
+    (req as AuthRequest).userId = userData.userId;
+
+    next();
+  } catch (e) {
+    throw new UnauthorizedError();
+  }
 }
