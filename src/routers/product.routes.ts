@@ -24,6 +24,11 @@ ProductRouter.post(
     validateQuery(ProductSchema.Query),
     ProductController.getProducts
   )
-  .get("/products/:id", ProductController.getProduct);
+  .get("/products/:id", ProductController.getProduct)
+  .put(
+    "/products/:id",
+    validateBody(ProductSchema.Product),
+    ProductController.updateProduct
+  );
 
 export { ProductRouter };

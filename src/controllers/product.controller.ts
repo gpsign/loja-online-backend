@@ -53,4 +53,17 @@ export class ProductController {
     });
     return res.status(201).json(products);
   }
+
+  static async updateProduct(req: Request, res: Response) {
+    const productId = Number(req.params.id);
+    const userId = (req as AuthRequest).userId;
+
+    const updatedProduct = await ProductService.updateProduct(
+      productId,
+      userId,
+      req.body
+    );
+
+    return res.status(200).json(updatedProduct);
+  }
 }

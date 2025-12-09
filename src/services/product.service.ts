@@ -1,5 +1,5 @@
 import { Prisma, Product, User } from "@prisma/client";
-import { NotFoundError } from "errors";
+import { ForbiddenError, NotFoundError } from "errors";
 import { ProductRepository, UserRepository } from "repositories";
 import {
   CreateProductParams,
@@ -7,6 +7,7 @@ import {
   ProductQueryConfig,
 } from "types";
 import { ProductUtils } from "utils";
+import { UserService } from "./user.service";
 
 export class ProductService {
   static async createProduct(params: CreateProductParams): Promise<Product> {
@@ -57,5 +58,23 @@ export class ProductService {
     params: ProductQueryConfig & { userId: User["id"] }
   ) {
     return await ProductRepository.findAll(params);
+  }
+
+  static async updateProduct(
+    productId: number,
+    senderId: number,
+    data: CreateProductParams
+  ) {
+    const [product, sender] = await Promise.all([
+      ProductService.findOrFail("id", productId),
+      UserService.findOrFail("id", senderId),
+    ]);
+
+    if (product.sellerId !== senderId && sender.role != "admin")
+      throw new ForbiddenError(
+        "Você não tem permissão para alterar o produto de outro vendedor"
+      );
+
+    return ProductRepository.update(productId, data);
   }
 }

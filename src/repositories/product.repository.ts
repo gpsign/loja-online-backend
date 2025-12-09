@@ -1,6 +1,10 @@
 import { Prisma, Product, User } from "@prisma/client";
 import { prisma } from "prisma";
-import { ProductQueryConfig, ProductQueryResult } from "types";
+import {
+  CreateProductParams,
+  ProductQueryConfig,
+  ProductQueryResult,
+} from "types";
 import { AppRepository } from "./app.repository";
 
 class ProductRepositoryClass extends AppRepository<"product"> {
@@ -95,6 +99,39 @@ class ProductRepositoryClass extends AppRepository<"product"> {
         totalPages: Math.ceil(total / size),
       },
     };
+  }
+
+  async update(id: number, data: CreateProductParams) {
+    const { images, config, ...productData } = data;
+
+    return prisma.product.update({
+      where: { id },
+      data: {
+        ...productData,
+        ...(images
+          ? {
+              images: {
+                deleteMany: {},
+                create: images,
+              },
+            }
+          : {}),
+        ...((config
+          ? {
+              config: {
+                upsert: {
+                  update: config,
+                  create: config,
+                },
+              },
+            }
+          : {}) as any),
+      },
+      include: {
+        images: true,
+        config: true,
+      },
+    });
   }
 }
 
