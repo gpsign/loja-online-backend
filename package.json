@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prebuild": "prisma generate",
     "build": "tsc && tsc-alias -p tsconfig.json",
     "start": "node dist/main.js",
     "dev": "tsx watch src/main.ts"
