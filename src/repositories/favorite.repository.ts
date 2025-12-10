@@ -32,7 +32,9 @@ class FavoriteRepositoryClass extends AppRepository<"favorite"> {
           include: {
             images: {
               where: { isCover: true },
+              take: 1,
             },
+            config: true,
           },
         },
       },
